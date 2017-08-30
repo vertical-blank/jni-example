@@ -1,0 +1,21 @@
+JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home
+
+OBJDIR = target/obj
+SRCDIR = src/main/c
+
+INCLUDE = -I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin \
+	-I${JAVA_HOME}/../include -I${JAVA_HOME}/../include/darwin
+LINK = -L${JAVA_HOME}/jre/lib/server -ljvm
+
+C_OBJ = $(OBJDIR)/fromc.o
+C_SRC = $(SRCDIR)/fromc.c
+
+.PHONY: all
+all: $(C_SRC) $(HEADERS) $(OBJDIR)
+	gcc -o $(C_OBJ) $(INCLUDE) $(LINK) $(C_SRC)
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+clean:
+	rm -rf $(C_OBJ)

@@ -1,0 +1,28 @@
+JAVA_HOME = /Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home
+
+OBJDIR = target/obj
+LIBDIR = target/lib
+SRCDIR = src/main/c
+
+INCLUDE = -I${JAVA_HOME}/include -I${JAVA_HOME}/include/darwin \
+	-I${JAVA_HOME}/../include -I${JAVA_HOME}/../include/darwin
+
+C_OBJ = $(OBJDIR)/vblank_Native.o
+C_SRC = $(SRCDIR)/vblank_Native.c
+C_LIB = $(LIBDIR)/libvblank_Native.dylib
+
+.PHONY: all
+all: $(C_LIB)
+
+$(C_LIB): $(C_OBJ) $(LIBDIR)
+	gcc -fPIC -shared -o $@ $(C_OBJ)
+$(C_OBJ): $(C_SRC) $(HEADERS) $(OBJDIR)
+	gcc -fPIC -c -O -o $@ $(INCLUDE) $(C_SRC)
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+$(LIBDIR):
+	mkdir -p $(LIBDIR)
+
+clean:
+	rm -rf $(C_OBJ) $(C_LIB)
